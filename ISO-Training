@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>C Spire ISO Compliance Training &mdash; Preview</title>
+<script>var SCORM={init:function(){return false;},set:function(){},get:function(){return"";},commit:function(){},complete:function(){},suspend:function(){}};</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --dk:#0E2030;--nv:#0F3D58;--bl:#00C0F3;
+  --or:#FF6720;--tl:#02C39A;--mu:#89DEF3;
+}
+body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;color:#fff;}
+#topbar{background:var(--nv);display:flex;align-items:center;
+  justify-content:space-between;padding:8px 20px;flex-shrink:0;
+  border-bottom:2px solid var(--bl);}
+.brand{background:var(--bl);color:var(--dk);font-weight:800;font-size:13px;
+  padding:4px 10px;border-radius:5px;letter-spacing:.5px;}
+#prog-wrap{background:#0a2535;height:4px;flex-shrink:0;}
+#prog-bar{height:4px;background:linear-gradient(90deg,var(--bl),var(--tl));
+  transition:width .5s ease;width:0%;}
+#content-area{flex:1;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px 32px;
+  opacity:0;transform:translateX(60px);
+  transition:opacity .4s ease,transform .4s ease;pointer-events:none;}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+.slide.exit{opacity:0;transform:translateX(-60px);}
+.badge{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--bl);background:rgba(0,192,243,.12);border:1px solid rgba(0,192,243,.3);
+  padding:4px 14px;border-radius:20px;margin-bottom:14px;
+  animation:fiD .5s ease .1s both;}
+.headline{font-size:24px;font-weight:800;text-align:center;line-height:1.25;
+  margin-bottom:8px;animation:fiD .5s ease .15s both;}
+.sub{font-size:13px;color:var(--mu);text-align:center;max-width:560px;
+  line-height:1.6;margin-bottom:20px;animation:fiD .5s ease .2s both;}
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  width:100%;max-width:640px;animation:fiU .5s ease .25s both;}
+.iso-card{background:rgba(15,61,88,.7);border:1px solid rgba(0,192,243,.2);
+  border-radius:10px;padding:16px 12px;text-align:center;cursor:pointer;
+  transition:transform .2s,border-color .2s,background .2s;
+  position:relative;overflow:hidden;}
+.iso-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--ca,var(--bl));}
+.iso-card:hover{transform:translateY(-4px);border-color:rgba(0,192,243,.5);}
+.iso-card.expanded{border-color:var(--ca,var(--bl));background:rgba(15,61,88,.95);}
+.card-icon{font-size:26px;margin-bottom:6px;display:block;}
+.card-std{font-size:17px;font-weight:800;color:var(--ca,var(--bl));margin-bottom:3px;}
+.card-name{font-size:11px;color:var(--mu);line-height:1.35;}
+.card-detail{font-size:11px;color:#cce9f5;line-height:1.5;margin-top:8px;
+  max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.iso-card.expanded .card-detail{max-height:120px;}
+/* Pillars */
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  width:100%;max-width:580px;animation:fiU .5s ease .25s both;}
+.pillar{background:rgba(15,61,88,.6);border:1px solid rgba(0,192,243,.15);
+  border-radius:10px;padding:14px;display:flex;align-items:flex-start;gap:10px;
+  transition:transform .2s,border-color .2s;}
+.pillar:hover{transform:translateY(-2px);border-color:rgba(0,192,243,.4);}
+.pnum{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;
+  background:var(--pb,rgba(0,192,243,.2));color:var(--pc,var(--bl));}
+.pbody h4{font-size:12px;font-weight:600;margin-bottom:3px;}
+.pbody p{font-size:11px;color:var(--mu);line-height:1.45;}
+/* Flow */
+.flow{display:flex;flex-direction:column;gap:8px;width:100%;
+  max-width:520px;animation:fiU .5s ease .25s both;}
+.flow-item{display:flex;align-items:center;gap:12px;padding:11px 14px;
+  background:rgba(15,61,88,.6);border-radius:8px;
+  border:1px solid rgba(0,192,243,.15);animation:fiL .4s ease both;}
+.fdot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.flabel{font-size:13px;font-weight:500;}
+.fdesc{font-size:11px;color:var(--mu);}
+/* Responsibilities */
+.rlist{width:100%;max-width:560px;display:flex;flex-direction:column;
+  gap:9px;animation:fiU .5s ease .25s both;}
+.ritem{display:flex;align-items:center;gap:12px;background:rgba(15,61,88,.6);
+  border:1px solid rgba(0,192,243,.15);border-radius:8px;padding:11px 14px;
+  cursor:pointer;transition:all .2s;}
+.ritem:hover{border-color:rgba(0,192,243,.4);}
+.ritem.checked .rcheck{background:var(--tl);border-color:var(--tl);}
+.ritem.checked .rcheck::after{opacity:1;}
+.rcheck{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,192,243,.4);
+  flex-shrink:0;position:relative;transition:all .2s;}
+.rcheck::after{content:'\2713';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:12px;color:#fff;
+  opacity:0;transition:opacity .2s;}
+.rtext{font-size:12px;line-height:1.4;}
+.rcat{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--or);
+  display:block;margin-bottom:2px;}
+#resp-note{font-size:11px;color:var(--mu);margin-top:8px;text-align:center;
+  animation:fiU .5s ease .4s both;}
+/* Resources */
+.resbox{background:rgba(0,192,243,.07);border:1px solid rgba(0,192,243,.3);
+  border-radius:10px;padding:18px 22px;text-align:center;width:100%;
+  max-width:500px;animation:fiU .5s ease .25s both;}
+.resbox h3{font-size:15px;margin-bottom:6px;}
+.resbox p{font-size:12px;color:var(--mu);margin-bottom:14px;}
+.rlinks{display:flex;flex-direction:column;gap:7px;}
+.rlink{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 13px;background:rgba(15,61,88,.8);border-radius:6px;
+  border:1px solid rgba(0,192,243,.2);text-decoration:none;color:#fff;
+  font-size:12px;transition:border-color .2s,background .2s;}
+.rlink:hover{border-color:var(--bl);background:rgba(15,61,88,1);}
+.rlink-tag{color:var(--or);font-weight:700;font-size:10px;white-space:nowrap;}
+/* Quiz */
+.qhdr{font-size:13px;font-weight:600;color:var(--bl);letter-spacing:.5px;
+  margin-bottom:5px;animation:fiD .5s ease .1s both;}
+.qtext{font-size:16px;font-weight:700;text-align:center;margin-bottom:18px;
+  line-height:1.4;max-width:560px;animation:fiD .5s ease .15s both;}
+.qopts{display:flex;flex-direction:column;gap:9px;width:100%;
+  max-width:540px;animation:fiU .5s ease .2s both;}
+.qopt{padding:12px 16px;background:rgba(15,61,88,.7);
+  border:1.5px solid rgba(0,192,243,.2);border-radius:8px;cursor:pointer;
+  font-size:13px;line-height:1.4;transition:all .2s;text-align:left;}
+.qopt:hover:not(.locked){border-color:var(--bl);background:rgba(15,61,88,.95);}
+.qopt.correct{border-color:var(--tl);background:rgba(2,195,154,.15);color:#a8f0df;}
+.qopt.wrong{border-color:#e05555;background:rgba(224,85,85,.12);color:#f4a0a0;}
+.qfb{margin-top:10px;font-size:12px;text-align:center;min-height:18px;
+  color:var(--mu);animation:fadeIn .3s ease;}
+.qfb.good{color:var(--tl);}
+.qfb.bad{color:#e88;}
+.qnav{margin-top:14px;display:flex;align-items:center;gap:12px;
+  animation:fiU .4s ease .3s both;}
+.qdots{display:flex;gap:6px;}
+.qdot{width:8px;height:8px;border-radius:50%;background:rgba(0,192,243,.2);
+  border:1px solid rgba(0,192,243,.3);transition:background .3s;}
+.qdot.ok{background:var(--tl);border-color:var(--tl);}
+.qdot.ng{background:#e05555;border-color:#e05555;}
+.qdot.cur{background:var(--bl);border-color:var(--bl);}
+#qctr{font-size:12px;color:var(--mu);}
+/* Result */
+#s8{text-align:center;}
+.ricon{font-size:52px;margin-bottom:10px;animation:bounce .6s ease both;}
+.rheadline{font-size:22px;font-weight:800;margin-bottom:7px;
+  animation:fiU .4s ease .1s both;}
+.rsub{font-size:13px;color:var(--mu);max-width:420px;line-height:1.6;
+  margin-bottom:18px;animation:fiU .4s ease .2s both;}
+.rscore{display:flex;gap:14px;justify-content:center;margin-bottom:18px;
+  animation:fiU .4s ease .25s both;}
+.pill{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:700;}
+.pill.pass{background:rgba(2,195,154,.2);color:var(--tl);border:1px solid var(--tl);}
+.pill.fail{background:rgba(224,85,85,.15);color:#e88;border:1px solid #e05555;}
+#btn-complete,#btn-retake{padding:11px 26px;border-radius:8px;font-size:13px;
+  font-weight:700;cursor:pointer;border:none;transition:all .2s;
+  animation:fiU .4s ease .35s both;}
+#btn-complete{background:var(--tl);color:#0a2030;}
+#btn-complete:hover{background:#03d8ac;transform:translateY(-1px);}
+#btn-retake{background:rgba(0,192,243,.15);color:var(--bl);
+  border:1.5px solid var(--bl);}
+#btn-retake:hover{background:rgba(0,192,243,.25);transform:translateY(-1px);}
+/* Nav */
+#botnav{background:var(--nv);display:flex;align-items:center;
+  justify-content:space-between;padding:9px 20px;flex-shrink:0;
+  border-top:1px solid rgba(0,192,243,.2);}
+.nbtn{background:var(--bl);color:var(--dk);border:none;border-radius:7px;
+  padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;
+  transition:background .2s,transform .1s;}
+.nbtn:hover{background:#02d8f5;transform:translateY(-1px);}
+.nbtn:disabled{background:#1a3a4e;color:#3d6070;cursor:not-allowed;transform:none;}
+.ndots{display:flex;gap:6px;}
+.ndot{width:9px;height:9px;border-radius:50%;background:rgba(0,192,243,.15);
+  border:1px solid rgba(0,192,243,.3);cursor:pointer;transition:all .2s;}
+.ndot.vis{background:rgba(0,192,243,.35);}
+.ndot.act{background:var(--bl);border-color:var(--bl);}
+.ndot.qd{background:rgba(255,103,32,.3);border-color:rgba(255,103,32,.5);}
+.ndot.qd.act{background:var(--or);border-color:var(--or);}
+/* Welcome */
+.wstds{display:flex;gap:18px;animation:fiU .5s ease .3s both;}
+.wsbox{text-align:center;padding:12px 18px;border-radius:10px;}
+.wsnum{font-size:20px;font-weight:800;}
+.wslbl{font-size:10px;color:var(--mu);margin-top:2px;}
+.blink{animation:pulse 2s infinite;}
+@keyframes fiD{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fiU{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fiL{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes bounce{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.1)}70%{transform:scale(.9)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+</style>
+</head>
+<body>
+ 
+<div id="topbar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="brand">C SPIRE</div>
+    <span style="color:rgba(137,222,243,.4);">|</span>
+    <span style="font-size:13px;color:var(--mu);">ISO Compliance Training</span>
+  </div>
+  <span id="slide-prog" style="font-size:12px;color:var(--mu);">Slide 1 of 9</span>
+</div>
+<div id="prog-wrap"><div id="prog-bar"></div></div>
+ 
+<div id="content-area">
+ 
+  <!-- S0: Welcome -->
+  <div class="slide active" id="s0">
+    <div class="badge">Welcome</div>
+    <div class="headline">C Spire ISO Compliance Training</div>
+    <div class="sub">This course covers our integrated management system across three global ISO standards. Complete all slides and pass the assessment to finish your training.</div>
+    <div class="wstds">
+      <div class="wsbox" style="background:rgba(0,192,243,.08);border:1px solid rgba(0,192,243,.2);">
+        <div class="wsnum" style="color:var(--bl);">9001</div><div class="wslbl">Quality Mgmt</div>
+      </div>
+      <div class="wsbox" style="background:rgba(255,103,32,.08);border:1px solid rgba(255,103,32,.2);">
+        <div class="wsnum" style="color:var(--or);">20000</div><div class="wslbl">Service Mgmt</div>
+      </div>
+      <div class="wsbox" style="background:rgba(2,195,154,.08);border:1px solid rgba(2,195,154,.2);">
+        <div class="wsnum" style="color:var(--tl);">27001</div><div class="wslbl">Info Security</div>
+      </div>
+    </div>
+    <div class="blink" style="margin-top:20px;font-size:11px;color:rgba(0,192,243,.6);">&#8595; Click Next to begin &#8595;</div>
+  </div>
+ 
+  <!-- S1: Three Standards -->
+  <div class="slide" id="s1">
+    <div class="badge">Overview</div>
+    <div class="headline">Our Three ISO Standards</div>
+    <div class="sub">Click each card to learn more about that standard</div>
+    <div class="card-grid">
+      <div class="iso-card" style="--ca:#00C0F3;" onclick="CSPIRE.toggleCard(this)">
+        <span class="card-icon">&#127942;</span>
+        <div class="card-std">ISO 9001</div>
+        <div class="card-name">Quality Management System</div>
+        <div class="card-detail">Ensures consistent, high-quality products and services. Focuses on customer satisfaction and continuous improvement through defined processes and regular audits.</div>
+      </div>
+      <div class="iso-card" style="--ca:#FF6720;" onclick="CSPIRE.toggleCard(this)">
+        <span class="card-icon">&#9881;</span>
+        <div class="card-std">ISO 20000</div>
+        <div class="card-name">Service Management System</div>
+        <div class="card-detail">Defines requirements for delivering managed IT services. Covers incident management, change control, SLA monitoring, and service continuity planning.</div>
+      </div>
+      <div class="iso-card" style="--ca:#02C39A;" onclick="CSPIRE.toggleCard(this)">
+        <span class="card-icon">&#128274;</span>
+        <div class="card-std">ISO 27001</div>
+        <div class="card-name">Information Security Mgmt</div>
+        <div class="card-detail">Protects information assets through a risk-based approach. Requires access controls, incident response, business continuity planning, and regular security reviews.</div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S2: ISO 9001 -->
+  <div class="slide" id="s2">
+    <div class="badge">ISO 9001 &middot; Quality</div>
+    <div class="headline">Quality Management System</div>
+    <div class="sub">C Spire QMS ensures every product and service meets defined quality standards</div>
+    <div class="pgrid">
+      <div class="pillar"><div class="pnum" style="--pb:rgba(0,192,243,.15);--pc:#00C0F3;">1</div><div class="pbody"><h4>Customer Focus</h4><p>All processes designed around delivering value and satisfaction to our customers</p></div></div>
+      <div class="pillar"><div class="pnum" style="--pb:rgba(0,192,243,.15);--pc:#00C0F3;">2</div><div class="pbody"><h4>Process Approach</h4><p>Consistent, repeatable processes ensure predictable, measurable outcomes</p></div></div>
+      <div class="pillar"><div class="pnum" style="--pb:rgba(0,192,243,.15);--pc:#00C0F3;">3</div><div class="pbody"><h4>Continual Improvement</h4><p>Regular audits, reviews, and corrective actions drive ongoing improvement</p></div></div>
+      <div class="pillar"><div class="pnum" style="--pb:rgba(0,192,243,.15);--pc:#00C0F3;">4</div><div class="pbody"><h4>Evidence-Based Decisions</h4><p>Data and analysis guide quality decisions, not assumptions</p></div></div>
+    </div>
+  </div>
+ 
+  <!-- S3: ISO 20000 -->
+  <div class="slide" id="s3">
+    <div class="badge">ISO 20000 &middot; Service</div>
+    <div class="headline">Service Management System</div>
+    <div class="sub">Our SMS governs how C Spire designs, delivers, and improves managed services</div>
+    <div class="flow">
+      <div class="flow-item" style="animation-delay:.1s"><div class="fdot" style="background:#FF6720;"></div><div><div class="flabel">Incident Management</div><div class="fdesc">Rapid response and resolution to minimize service disruption</div></div></div>
+      <div class="flow-item" style="animation-delay:.2s"><div class="fdot" style="background:#FF6720;"></div><div><div class="flabel">Change Control</div><div class="fdesc">All changes assessed, approved, and tracked to prevent unintended impacts</div></div></div>
+      <div class="flow-item" style="animation-delay:.3s"><div class="fdot" style="background:#FF6720;"></div><div><div class="flabel">SLA Monitoring</div><div class="fdesc">Service-level agreements tracked continuously against commitments</div></div></div>
+      <div class="flow-item" style="animation-delay:.4s"><div class="fdot" style="background:#FF6720;"></div><div><div class="flabel">Service Continuity</div><div class="fdesc">Plans in place to maintain services during unexpected events</div></div></div>
+    </div>
+  </div>
+ 
+  <!-- S4: ISO 27001 -->
+  <div class="slide" id="s4">
+    <div class="badge">ISO 27001 &middot; Security</div>
+    <div class="headline">Information Security Management</div>
+    <div class="sub">Protecting C Spire data and our customers information is everyone's responsibility</div>
+    <div class="pgrid">
+      <div class="pillar"><div class="pnum" style="--pb:rgba(2,195,154,.15);--pc:#02C39A;">C</div><div class="pbody"><h4>Confidentiality</h4><p>Only authorized users access sensitive data</p></div></div>
+      <div class="pillar"><div class="pnum" style="--pb:rgba(2,195,154,.15);--pc:#02C39A;">I</div><div class="pbody"><h4>Integrity</h4><p>Data is accurate, complete, and unaltered</p></div></div>
+      <div class="pillar"><div class="pnum" style="--pb:rgba(2,195,154,.15);--pc:#02C39A;">A</div><div class="pbody"><h4>Availability</h4><p>Systems accessible when needed by authorized users</p></div></div>
+      <div class="pillar" style="background:rgba(2,195,154,.06);border-color:rgba(2,195,154,.25);"><div class="pnum" style="--pb:rgba(2,195,154,.15);--pc:#02C39A;">R</div><div class="pbody"><h4>Risk Management</h4><p>Regular assessments identify and mitigate security risks</p></div></div>
+    </div>
+  </div>
+ 
+  <!-- S5: Responsibilities -->
+  <div class="slide" id="s5">
+    <div class="badge">Your Role</div>
+    <div class="headline">Your Responsibilities</div>
+    <div class="sub">Click each item to acknowledge your understanding</div>
+    <div class="rlist">
+      <div class="ritem" onclick="CSPIRE.checkResp(this)"><div class="rcheck"></div><div class="rtext"><span class="rcat">Quality</span>Follow documented processes and report quality issues promptly</div></div>
+      <div class="ritem" onclick="CSPIRE.checkResp(this)"><div class="rcheck"></div><div class="rtext"><span class="rcat">Service</span>Use proper change control procedures before modifying any system</div></div>
+      <div class="ritem" onclick="CSPIRE.checkResp(this)"><div class="rcheck"></div><div class="rtext"><span class="rcat">Security</span>Protect credentials and report suspected security incidents immediately</div></div>
+      <div class="ritem" onclick="CSPIRE.checkResp(this)"><div class="rcheck"></div><div class="rtext"><span class="rcat">All Standards</span>Complete required training and participate in internal audits when scheduled</div></div>
+    </div>
+    <div id="resp-note">Click each item to acknowledge</div>
+  </div>
+ 
+  <!-- S6: Resources -->
+  <div class="slide" id="s6">
+    <div class="badge">Resources</div>
+    <div class="headline">Policies &amp; Key Resources</div>
+    <div class="sub">All policy documents live on the C Spire ISO SharePoint site</div>
+    <div class="resbox">
+      <h3>ISO Policy Documents</h3>
+      <p>Reference these documents anytime &#8212; they define your obligations</p>
+      <div class="rlinks">
+        <a class="rlink" href="https://cspire.sharepoint.com/sites/ISO" target="_blank"><span>QMS Policy &amp; IMS Manual</span><span class="rlink-tag">ISO 9001 &#8594;</span></a>
+        <a class="rlink" href="https://cspire.sharepoint.com/sites/ISO" target="_blank"><span>Service Management System Policy</span><span class="rlink-tag">ISO 20000 &#8594;</span></a>
+        <a class="rlink" href="https://cspire.sharepoint.com/sites/ISO" target="_blank"><span>Information Security Management Policy</span><span class="rlink-tag">ISO 27001 &#8594;</span></a>
+        <a class="rlink" href="mailto:ISO@cspire.com"><span>Questions? Contact the ISO Team</span><span class="rlink-tag">ISO@cspire.com</span></a>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- S7: Quiz -->
+  <div class="slide" id="s7">
+    <div class="qhdr">Knowledge Assessment &#8212; Question <span id="qnum">1</span> of 3</div>
+    <div class="qtext" id="qtext"></div>
+    <div class="qopts" id="qopts"></div>
+    <div class="qfb" id="qfb"></div>
+    <div class="qnav">
+      <div class="qdots">
+        <div class="qdot cur" id="qd0"></div>
+        <div class="qdot" id="qd1"></div>
+        <div class="qdot" id="qd2"></div>
+      </div>
+      <span id="qctr">Answer to continue</span>
+    </div>
+  </div>
+ 
+  <!-- S8: Result -->
+  <div class="slide" id="s8">
+    <div class="ricon" id="ricon">&#127881;</div>
+    <div class="rheadline" id="rheadline">Training Complete!</div>
+    <div class="rsub" id="rsub"></div>
+    <div class="rscore" id="rscore"></div>
+    <button id="btn-complete" style="display:none;" onclick="CSPIRE.markComplete()">&#10003; Submit &amp; Complete Training</button>
+    <button id="btn-retake" style="display:none;" onclick="CSPIRE.retakeCourse()">&#8635; Retake Course</button>
+  </div>
+ 
+</div>
+ 
+<div id="botnav">
+  <button class="nbtn" id="btn-prev" disabled onclick="CSPIRE.nav(-1)">&#8592; Previous</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+    <div class="ndots" id="ndots"></div>
+    <div id="slide-lbl" style="font-size:11px;color:var(--mu);">Slide 1 of 9</div>
+  </div>
+  <button class="nbtn" id="btn-next" onclick="CSPIRE.nav(1)">Next &#8594;</button>
+</div>
+ 
+<script>
+var CSPIRE = (function() {
+  var TOTAL = 9;
+  var QUIZ_IDX = 7;
+  var RESULT_IDX = 8;
+  var cur = 0;
+  var quizStarted = false;
+  var quizDone = false;
+  var curQ = 0;
+  var answers = [];
+  var respCount = 0;
+  var scormOn = false;
+ 
+  var QUESTIONS = [
+    {
+      q: "Which ISO standard focuses specifically on managing information security risks to protect data confidentiality, integrity, and availability?",
+      opts: [
+        "ISO 9001 - Quality Management System",
+        "ISO 20000 - Service Management System",
+        "ISO 27001 - Information Security Management System",
+        "ISO 14001 - Environmental Management System"
+      ],
+      correct: 2,
+      fr: "Correct! ISO 27001 is the standard dedicated to information security management.",
+      fw: "Not quite. ISO 27001 covers information security and protects the CIA triad: Confidentiality, Integrity, and Availability."
+    },
+    {
+      q: "Before making changes to a production system at C Spire, an employee should:",
+      opts: [
+        "Make the change immediately if it seems low-risk",
+        "Follow the change control process required by ISO 20000",
+        "Only notify their manager after the change is complete",
+        "Wait until the annual audit to document the change"
+      ],
+      correct: 1,
+      fr: "Correct! ISO 20000 requires all changes go through the change control process to prevent unintended service impacts.",
+      fw: "Incorrect. ISO 20000 change control must be followed before any system change, regardless of perceived risk."
+    },
+    {
+      q: "C Spire Quality Management System (ISO 9001) is primarily focused on:",
+      opts: [
+        "Reducing the number of employees in quality roles",
+        "Meeting regulatory requirements for financial reporting",
+        "Ensuring consistent, high-quality products and services that satisfy customers",
+        "Eliminating all customer complaints within 24 hours"
+      ],
+      correct: 2,
+      fr: "Correct! ISO 9001 centers on delivering consistent quality and driving customer satisfaction through defined processes.",
+      fw: "Not quite. ISO 9001 focuses on consistent quality delivery and customer satisfaction through continual improvement."
+    }
+  ];
+ 
+  function buildDots() {
+    var wrap = document.getElementById("ndots");
+    wrap.innerHTML = "";
+    for (var i = 0; i < TOTAL; i++) {
+      var d = document.createElement("div");
+      d.className = "ndot" + (i >= QUIZ_IDX ? " qd" : "");
+      (function(idx) {
+        d.onclick = function() { if (idx <= cur) goTo(idx); };
+      })(i);
+      wrap.appendChild(d);
+    }
+    refreshDots();
+  }
+ 
+  function refreshDots() {
+    var dots = document.querySelectorAll(".ndot");
+    dots.forEach(function(d, i) {
+      var cls = "ndot" + (i >= QUIZ_IDX ? " qd" : "");
+      if (i < cur) cls += " vis";
+      if (i === cur) cls += " act";
+      d.className = cls;
+    });
+  }
+ 
+  function goTo(idx) {
+    if (idx < 0 || idx >= TOTAL) return;
+    if (idx === QUIZ_IDX && !quizStarted) startQuiz();
+    var slides = document.querySelectorAll(".slide");
+    slides[cur].classList.remove("active");
+    slides[cur].classList.add("exit");
+    var prev = cur;
+    setTimeout(function() { slides[prev].classList.remove("exit"); }, 400);
+    cur = idx;
+    slides[cur].classList.add("active");
+    document.getElementById("btn-prev").disabled = (cur === 0);
+    document.getElementById("btn-next").disabled =
+      (cur === TOTAL - 1) ||
+      (cur === QUIZ_IDX && !quizDone) ||
+      (cur === RESULT_IDX);
+    var label = "Slide " + (cur + 1) + " of " + TOTAL;
+    document.getElementById("slide-prog").textContent = label;
+    document.getElementById("slide-lbl").textContent = label;
+    document.getElementById("prog-bar").style.width =
+      Math.round(((cur + 1) / TOTAL) * 100) + "%";
+    refreshDots();
+    if (scormOn) SCORM.set("cmi.core.lesson_location", String(cur));
+  }
+ 
+  function nav(dir) { goTo(cur + dir); }
+ 
+  function toggleCard(el) {
+    var was = el.classList.contains("expanded");
+    document.querySelectorAll(".iso-card").forEach(function(c) {
+      c.classList.remove("expanded");
+    });
+    if (!was) el.classList.add("expanded");
+  }
+ 
+  function checkResp(el) {
+    if (el.classList.contains("checked")) return;
+    el.classList.add("checked");
+    respCount++;
+    var note = document.getElementById("resp-note");
+    if (respCount === 4) {
+      note.textContent = "All responsibilities acknowledged";
+      note.style.color = "#02C39A";
+    } else {
+      note.textContent = respCount + " of 4 acknowledged";
+    }
+  }
+ 
+  function startQuiz() {
+    if (quizStarted) return;
+    quizStarted = true;
+    curQ = 0;
+    answers = [];
+    renderQ();
+  }
+ 
+  function renderQ() {
+    var q = QUESTIONS[curQ];
+    document.getElementById("qnum").textContent = curQ + 1;
+    document.getElementById("qtext").textContent = q.q;
+    document.getElementById("qfb").textContent = "";
+    document.getElementById("qfb").className = "qfb";
+    var ctr = document.getElementById("qctr");
+    ctr.textContent = "Answer to continue";
+    ctr.style.cursor = "";
+    ctr.style.color = "";
+    ctr.onclick = null;
+    var wrap = document.getElementById("qopts");
+    wrap.innerHTML = "";
+    q.opts.forEach(function(opt, i) {
+      var btn = document.createElement("div");
+      btn.className = "qopt";
+      btn.textContent = opt;
+      (function(idx) {
+        btn.onclick = function() { pickAnswer(idx); };
+      })(i);
+      wrap.appendChild(btn);
+    });
+    refreshQDots();
+  }
+ 
+  function pickAnswer(idx) {
+    var opts = document.querySelectorAll(".qopt");
+    var alreadyDone = false;
+    opts.forEach(function(o) {
+      if (o.classList.contains("correct") || o.classList.contains("wrong")) {
+        alreadyDone = true;
+      }
+    });
+    if (alreadyDone) return;
+ 
+    var q = QUESTIONS[curQ];
+    var right = (idx === q.correct);
+    opts.forEach(function(o, i) {
+      o.classList.add("locked");
+      if (i === q.correct) o.classList.add("correct");
+      if (i === idx && !right) o.classList.add("wrong");
+    });
+    answers[curQ] = right;
+ 
+    var fb = document.getElementById("qfb");
+    fb.textContent = right ? q.fr : q.fw;
+    fb.className = "qfb " + (right ? "good" : "bad");
+    refreshQDots();
+ 
+    var ctr = document.getElementById("qctr");
+    if (curQ < 2) {
+      ctr.textContent = "Next question";
+      ctr.style.cursor = "pointer";
+      ctr.style.color = "#00C0F3";
+      ctr.onclick = function() {
+        curQ++;
+        ctr.onclick = null;
+        ctr.style.cursor = "";
+        ctr.style.color = "";
+        renderQ();
+      };
+    } else {
+      setTimeout(showResult, 1000);
+    }
+  }
+ 
+  function refreshQDots() {
+    for (var i = 0; i < 3; i++) {
+      var d = document.getElementById("qd" + i);
+      d.className = "qdot";
+      if (i < curQ && answers[i] !== undefined) {
+        d.classList.add(answers[i] ? "ok" : "ng");
+      }
+      if (i === curQ) d.classList.add("cur");
+    }
+  }
+ 
+  function showResult() {
+    quizDone = true;
+    var score = answers.filter(Boolean).length;
+    var passed = score >= 2;
+    document.getElementById("ricon").innerHTML = passed ? "&#127881;" : "&#128532;";
+    document.getElementById("rheadline").textContent = passed ? "Training Complete!" : "Not Quite There";
+    document.getElementById("rsub").textContent = passed
+      ? "Great work! You scored " + score + "/3 and demonstrated solid understanding of C Spire ISO compliance obligations."
+      : "You scored " + score + "/3. You must answer at least 2 of 3 correctly. Please retake the full course.";
+    var sc = document.getElementById('rscore');
+    var cls = passed ? 'pass' : 'fail';
+    var span1 = document.createElement('span');
+    span1.className = 'pill ' + cls;
+    span1.textContent = score + '/3 Correct';
+    var span2 = document.createElement('span');
+    span2.className = 'pill ' + cls;
+    span2.textContent = passed ? 'PASSED' : 'NOT PASSED';
+    sc.innerHTML = '';
+    sc.appendChild(span1);
+    sc.appendChild(span2);
+    if (passed) {
+      document.getElementById("btn-complete").style.display = "inline-block";
+      if (scormOn) {
+        SCORM.set("cmi.core.score.raw", String(Math.round(score / 3 * 100)));
+        SCORM.set("cmi.core.score.min", "0");
+        SCORM.set("cmi.core.score.max", "100");
+      }
+    } else {
+      document.getElementById("btn-retake").style.display = "inline-block";
+    }
+    goTo(RESULT_IDX);
+  }
+ 
+  function markComplete() {
+    var btn = document.getElementById("btn-complete");
+    btn.textContent = "Training Submitted!";
+    btn.style.background = "#05a07e";
+    btn.disabled = true;
+    if (scormOn) {
+      SCORM.complete();
+    } else {
+      setTimeout(function() {
+        alert("Training marked complete! When hosted in the LMS, this sends a completion record to Workday.");
+      }, 300);
+    }
+  }
+ 
+  function retakeCourse() {
+    quizStarted = false;
+    quizDone = false;
+    curQ = 0;
+    answers = [];
+    respCount = 0;
+    document.getElementById("btn-complete").style.display = "none";
+    document.getElementById("btn-retake").style.display = "none";
+    document.querySelectorAll(".ritem").forEach(function(el) {
+      el.classList.remove("checked");
+    });
+    var note = document.getElementById("resp-note");
+    note.textContent = "Click each item to acknowledge";
+    note.style.color = "";
+    goTo(0);
+  }
+ 
+  // Init
+  buildDots();
+  goTo(0);
+  scormOn = SCORM.init();
+  if (scormOn) {
+    var loc = parseInt(SCORM.get("cmi.core.lesson_location"), 10);
+    if (!isNaN(loc) && loc > 0 && loc < TOTAL) goTo(loc);
+  }
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") nav(1);
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") nav(-1);
+  });
+  window.addEventListener("beforeunload", function() {
+    if (scormOn && !quizDone) SCORM.suspend();
+  });
+ 
+  return {
+    nav: nav,
+    toggleCard: toggleCard,
+    checkResp: checkResp,
+    markComplete: markComplete,
+    retakeCourse: retakeCourse
+  };
+})();
+</script>
+</body>
+</html>
