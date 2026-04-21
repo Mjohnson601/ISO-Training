@@ -183,7 +183,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
 </style>
 </head>
 <body>
- 
+
 <div id="topbar">
   <div style="display:flex;align-items:center;gap:10px;">
     <div class="brand">C SPIRE</div>
@@ -193,9 +193,9 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
   <span id="slide-prog" style="font-size:12px;color:var(--mu);">Slide 1 of 9</span>
 </div>
 <div id="prog-wrap"><div id="prog-bar"></div></div>
- 
+
 <div id="content-area">
- 
+
   <!-- S0: Welcome -->
   <div class="slide active" id="s0">
     <div class="badge">Welcome</div>
@@ -214,7 +214,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
     </div>
     <div class="blink" style="margin-top:20px;font-size:11px;color:rgba(0,192,243,.6);">&#8595; Click Next to begin &#8595;</div>
   </div>
- 
+
   <!-- S1: Three Standards -->
   <div class="slide" id="s1">
     <div class="badge">Overview</div>
@@ -241,7 +241,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       </div>
     </div>
   </div>
- 
+
   <!-- S2: ISO 9001 -->
   <div class="slide" id="s2">
     <div class="badge">ISO 9001 &middot; Quality</div>
@@ -254,7 +254,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       <div class="pillar"><div class="pnum" style="--pb:rgba(0,192,243,.15);--pc:#00C0F3;">4</div><div class="pbody"><h4>Evidence-Based Decisions</h4><p>Data and analysis guide quality decisions, not assumptions</p></div></div>
     </div>
   </div>
- 
+
   <!-- S3: ISO 20000 -->
   <div class="slide" id="s3">
     <div class="badge">ISO 20000 &middot; Service</div>
@@ -267,7 +267,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       <div class="flow-item" style="animation-delay:.4s"><div class="fdot" style="background:#FF6720;"></div><div><div class="flabel">Service Continuity</div><div class="fdesc">Plans in place to maintain services during unexpected events</div></div></div>
     </div>
   </div>
- 
+
   <!-- S4: ISO 27001 -->
   <div class="slide" id="s4">
     <div class="badge">ISO 27001 &middot; Security</div>
@@ -280,7 +280,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       <div class="pillar" style="background:rgba(2,195,154,.06);border-color:rgba(2,195,154,.25);"><div class="pnum" style="--pb:rgba(2,195,154,.15);--pc:#02C39A;">R</div><div class="pbody"><h4>Risk Management</h4><p>Regular assessments identify and mitigate security risks</p></div></div>
     </div>
   </div>
- 
+
   <!-- S5: Responsibilities -->
   <div class="slide" id="s5">
     <div class="badge">Your Role</div>
@@ -294,7 +294,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
     </div>
     <div id="resp-note">Click each item to acknowledge</div>
   </div>
- 
+
   <!-- S6: Resources -->
   <div class="slide" id="s6">
     <div class="badge">Resources</div>
@@ -311,7 +311,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       </div>
     </div>
   </div>
- 
+
   <!-- S7: Quiz -->
   <div class="slide" id="s7">
     <div class="qhdr">Knowledge Assessment &#8212; Question <span id="qnum">1</span> of 3</div>
@@ -327,7 +327,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
       <span id="qctr">Answer to continue</span>
     </div>
   </div>
- 
+
   <!-- S8: Result -->
   <div class="slide" id="s8">
     <div class="ricon" id="ricon">&#127881;</div>
@@ -337,9 +337,9 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
     <button id="btn-complete" style="display:none;" onclick="CSPIRE.markComplete()">&#10003; Submit &amp; Complete Training</button>
     <button id="btn-retake" style="display:none;" onclick="CSPIRE.retakeCourse()">&#8635; Retake Course</button>
   </div>
- 
+
 </div>
- 
+
 <div id="botnav">
   <button class="nbtn" id="btn-prev" disabled onclick="CSPIRE.nav(-1)">&#8592; Previous</button>
   <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
@@ -348,7 +348,7 @@ body{background:var(--dk);font-family:'Segoe UI',system-ui,sans-serif;
   </div>
   <button class="nbtn" id="btn-next" onclick="CSPIRE.nav(1)">Next &#8594;</button>
 </div>
- 
+
 <script>
 var CSPIRE = (function() {
   var TOTAL = 9;
@@ -361,7 +361,7 @@ var CSPIRE = (function() {
   var answers = [];
   var respCount = 0;
   var scormOn = false;
- 
+
   var QUESTIONS = [
     {
       q: "Which ISO standard focuses specifically on managing information security risks to protect data confidentiality, integrity, and availability?",
@@ -400,7 +400,7 @@ var CSPIRE = (function() {
       fw: "Not quite. ISO 9001 focuses on consistent quality delivery and customer satisfaction through continual improvement."
     }
   ];
- 
+
   function buildDots() {
     var wrap = document.getElementById("ndots");
     wrap.innerHTML = "";
@@ -414,7 +414,7 @@ var CSPIRE = (function() {
     }
     refreshDots();
   }
- 
+
   function refreshDots() {
     var dots = document.querySelectorAll(".ndot");
     dots.forEach(function(d, i) {
@@ -424,7 +424,7 @@ var CSPIRE = (function() {
       d.className = cls;
     });
   }
- 
+
   function goTo(idx) {
     if (idx < 0 || idx >= TOTAL) return;
     if (idx === QUIZ_IDX && !quizStarted) startQuiz();
@@ -448,9 +448,9 @@ var CSPIRE = (function() {
     refreshDots();
     if (scormOn) SCORM.set("cmi.core.lesson_location", String(cur));
   }
- 
+
   function nav(dir) { goTo(cur + dir); }
- 
+
   function toggleCard(el) {
     var was = el.classList.contains("expanded");
     document.querySelectorAll(".iso-card").forEach(function(c) {
@@ -458,7 +458,7 @@ var CSPIRE = (function() {
     });
     if (!was) el.classList.add("expanded");
   }
- 
+
   function checkResp(el) {
     if (el.classList.contains("checked")) return;
     el.classList.add("checked");
@@ -471,7 +471,7 @@ var CSPIRE = (function() {
       note.textContent = respCount + " of 4 acknowledged";
     }
   }
- 
+
   function startQuiz() {
     if (quizStarted) return;
     quizStarted = true;
@@ -479,7 +479,7 @@ var CSPIRE = (function() {
     answers = [];
     renderQ();
   }
- 
+
   function renderQ() {
     var q = QUESTIONS[curQ];
     document.getElementById("qnum").textContent = curQ + 1;
@@ -504,7 +504,7 @@ var CSPIRE = (function() {
     });
     refreshQDots();
   }
- 
+
   function pickAnswer(idx) {
     var opts = document.querySelectorAll(".qopt");
     var alreadyDone = false;
@@ -514,7 +514,7 @@ var CSPIRE = (function() {
       }
     });
     if (alreadyDone) return;
- 
+
     var q = QUESTIONS[curQ];
     var right = (idx === q.correct);
     opts.forEach(function(o, i) {
@@ -523,12 +523,12 @@ var CSPIRE = (function() {
       if (i === idx && !right) o.classList.add("wrong");
     });
     answers[curQ] = right;
- 
+
     var fb = document.getElementById("qfb");
     fb.textContent = right ? q.fr : q.fw;
     fb.className = "qfb " + (right ? "good" : "bad");
     refreshQDots();
- 
+
     var ctr = document.getElementById("qctr");
     if (curQ < 2) {
       ctr.textContent = "Next question";
@@ -545,7 +545,7 @@ var CSPIRE = (function() {
       setTimeout(showResult, 1000);
     }
   }
- 
+
   function refreshQDots() {
     for (var i = 0; i < 3; i++) {
       var d = document.getElementById("qd" + i);
@@ -556,7 +556,7 @@ var CSPIRE = (function() {
       if (i === curQ) d.classList.add("cur");
     }
   }
- 
+
   function showResult() {
     quizDone = true;
     var score = answers.filter(Boolean).length;
@@ -589,7 +589,7 @@ var CSPIRE = (function() {
     }
     goTo(RESULT_IDX);
   }
- 
+
   function markComplete() {
     var btn = document.getElementById("btn-complete");
     btn.textContent = "Training Submitted!";
@@ -603,7 +603,7 @@ var CSPIRE = (function() {
       }, 300);
     }
   }
- 
+
   function retakeCourse() {
     quizStarted = false;
     quizDone = false;
@@ -620,7 +620,7 @@ var CSPIRE = (function() {
     note.style.color = "";
     goTo(0);
   }
- 
+
   // Init
   buildDots();
   goTo(0);
@@ -636,7 +636,7 @@ var CSPIRE = (function() {
   window.addEventListener("beforeunload", function() {
     if (scormOn && !quizDone) SCORM.suspend();
   });
- 
+
   return {
     nav: nav,
     toggleCard: toggleCard,
